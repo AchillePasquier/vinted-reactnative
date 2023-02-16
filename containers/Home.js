@@ -14,23 +14,25 @@ import {
   Dimensions,
   TextInput,
   ScrollView,
+  TouchableHighlight,
+  VirtualizedList,
 } from "react-native";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+import SearchBar from "../components/Searchbar";
+
 const WIDTH = Dimensions.get("window").width;
 
-// const MyStatusBar = ({ backgroundColor, ...props }) => (
-//   <View style={[styles.statusBar, { backgroundColor }]}>
-//     <SafeAreaView>
-//       <StatusBar backgroundColor={backgroundColor} {...props} />
-//     </SafeAreaView>
-//   </View>
-// );
-
-const Item = ({ img, price, details }) => (
+const Item = ({ img, price, details, navigation, id }) => (
   <View style={styles.item}>
-    <View style={styles.centerItem}>
+    <TouchableOpacity
+      style={styles.centerItem}
+      onPress={() => {
+        navigation.navigate("Product", { id: id });
+      }}
+      activeOpacity={0.5}
+    >
       <Image style={styles.image} source={{ uri: img }}></Image>
       <View style={styles.itemDesc}>
         <View style={styles.brandSize}>
@@ -39,13 +41,14 @@ const Item = ({ img, price, details }) => (
         </View>
         <Text style={styles.price}>{price} €</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   </View>
 );
 
-const HomeScreen = ({ navigation, search }) => {
+const HomeScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsloading] = useState(true);
+  const [search, setSearch] = React.useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,6 +65,12 @@ const HomeScreen = ({ navigation, search }) => {
     fetchData();
   }, [search]);
 
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => <SearchBar setSearch={setSearch} />,
+    });
+  }, [navigation]);
+
   // console.log(data);
 
   return (
@@ -71,8 +80,8 @@ const HomeScreen = ({ navigation, search }) => {
       />
       {isLoading ? (
         <ActivityIndicator
-          size="large"
-          color="#EB5A62"
+          size="small"
+          color="#B8B8B8"
           style={{ paddingTop: 100 }}
         />
       ) : (
@@ -83,11 +92,14 @@ const HomeScreen = ({ navigation, search }) => {
               img={item.product_image.secure_url}
               price={item.product_price}
               details={item.product_details}
+              navigation={navigation}
+              id={item._id}
             />
           )}
           keyExtractor={(item) => item._id}
           style={styles.list}
           numColumns={2}
+          initialNumToRender={8}
         />
       )}
     </SafeAreaView>

@@ -1,30 +1,56 @@
-import { TextInput, StyleSheet, Dimensions, View } from "react-native";
+import * as React from "react";
+import {
+  TextInput,
+  StyleSheet,
+  Dimensions,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 const WIDTH = Dimensions.get("window").width;
 
-const SearchBar = (setSearch) => {
+const SearchBar = ({ setSearch }) => {
+  const [filled, setFilled] = React.useState("");
+
   return (
-    <View style={styles.searchBar}>
-      <Ionicons
-        name="search"
-        style={styles.maglass}
-        size={20}
-        color="#B8B8B8"
-      />
-      <TextInput
-        style={styles.textInput}
-        placeholder="Rechercher un article"
-        placeholderTextColor={"#B8B8B8"}
-        keyboardType="default"
-        inputMode="search"
-        keyboardAppearance="dark"
-        returnKeyType="search"
-        // defaultValue=""
-        onChange={(event) => {
-          setSearch(event.target.value);
-        }}
-      />
+    <View>
+      <View style={styles.searchBar}>
+        <Ionicons
+          name="search"
+          style={styles.maglass}
+          size={20}
+          color="#B8B8B8"
+        />
+        <TextInput
+          style={styles.textInput}
+          placeholder="Rechercher un article"
+          placeholderTextColor={"#B8B8B8"}
+          keyboardType="default"
+          inputMode="search"
+          keyboardAppearance="dark"
+          returnKeyType="search"
+          value={filled}
+          onChangeText={(text) => {
+            setSearch(text);
+            setFilled(text);
+          }}
+          // clearButtonMode="always"
+        />
+      </View>
+      {filled ? (
+        <TouchableOpacity
+          style={styles.close}
+          onPress={() => {
+            setFilled("");
+            setSearch("");
+          }}
+        >
+          <Ionicons name="close" size={20} color="#B8B8B8" />
+        </TouchableOpacity>
+      ) : (
+        <></>
+      )}
     </View>
   );
 };
@@ -53,5 +79,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     // borderColor: "blue",
     // borderWidth: 1,
+  },
+  close: {
+    position: "absolute",
+    right: "3%",
+    top: "24%",
   },
 });

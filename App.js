@@ -14,9 +14,11 @@ import DetailsScreen from "./containers/Details";
 import SearchBar from "./components/Searchbar";
 import Logo from "./components/Logo";
 
+import Ionicons from "@expo/vector-icons/Ionicons";
+
 const HomeStack = createNativeStackNavigator();
 
-function HomeStackScreen(search, setSearch) {
+function HomeStackScreen() {
   return (
     <HomeStack.Navigator
       screenOptions={{
@@ -24,24 +26,19 @@ function HomeStackScreen(search, setSearch) {
           backgroundColor: "#1E1E1E",
         },
         headerTintColor: "white",
-        headerTitleStyle: {
-          fontWeight: "bold",
-        },
       }}
     >
       <HomeStack.Screen
         name="Home"
-        // component={HomeScreen}
-        options={{
-          headerTitle: () => <SearchBar setSearch={setSearch} />,
-        }}
-      >
-        {() => <HomeScreen search={search} />}
-      </HomeStack.Screen>
+        component={HomeScreen}
+        options={({ navigation, route }) => ({
+          headerTitle: (props) => <SearchBar {...props} />,
+        })}
+      />
       <HomeStack.Screen
         name="Product"
         component={ProductScreen}
-        options={{ headerShown: false }}
+        options={{ headerShown: true }}
       />
     </HomeStack.Navigator>
   );
@@ -65,19 +62,36 @@ function SettingsStackScreen() {
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  const [search, setSearch] = useState("vans");
-
   return (
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: "tomato",
-          tabBarInactiveTintColor: "gray",
+          tabBarActiveTintColor: "#01B5BB",
+          tabBarInactiveTintColor: "#B8B8B8",
+          tabBarStyle: { backgroundColor: "#1E1E1E", borderTopWidth: 0 },
         }}
       >
-        <Tab.Screen name="Accueil" component={HomeStackScreen} />
-        <Tab.Screen name="Paramètres" component={SettingsStackScreen} />
+        <Tab.Screen
+          name="TabHome"
+          options={{
+            tabBarLabel: "Accueil",
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="home-sharp" size={size} color={color} />
+            ),
+          }}
+          component={HomeStackScreen}
+        />
+        <Tab.Screen
+          name="Paramètres"
+          options={{
+            tabBarLabel: "Paramètres",
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="settings" size={size} color={color} />
+            ),
+          }}
+          component={SettingsStackScreen}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
