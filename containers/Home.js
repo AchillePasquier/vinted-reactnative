@@ -54,7 +54,7 @@ const HomeScreen = ({ navigation }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://backend-vinted-achille.herokuapp.com/offers?limit=30&title=${search}`
+          `http://localhost:4000/offers?limit=30&title=${search}`
         );
         setData(response.data);
         setIsloading(false);
