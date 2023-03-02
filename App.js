@@ -109,17 +109,17 @@ export default function App() {
   return (
     <NavigationContainer>
       {userToken === null ? (
-        <>
+        <Stack.Navigator>
           <Stack.Screen name="Started" options={{ headerShown: false }}>
             {() => <StartedScreen />}
           </Stack.Screen>
-          <Stack.Screen name="LogIn" options={{ headerShown: false }}>
+          <Stack.Screen name="LogIn" options={{ headerShown: true }}>
             {() => <LogInScreen setToken={setToken} />}
           </Stack.Screen>
-          <Stack.Screen name="SignUp" options={{ headerShown: false }}>
+          <Stack.Screen name="SignUp" options={{ headerShown: true }}>
             {(props) => <SignUpScreen {...props} setToken={setToken} />}
           </Stack.Screen>
-        </>
+        </Stack.Navigator>
       ) : (
         <Tab.Navigator
           screenOptions={{
