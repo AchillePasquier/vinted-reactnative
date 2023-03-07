@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     borderRadius: 5,
+    marginRight: 0,
   },
   maglass: {
     marginLeft: 10,

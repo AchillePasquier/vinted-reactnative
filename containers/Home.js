@@ -100,6 +100,7 @@ const HomeScreen = ({ navigation }) => {
           style={styles.list}
           numColumns={2}
           initialNumToRender={8}
+          // contentInsetAdjustmentBehavior="automatic"
         />
       )}
     </SafeAreaView>

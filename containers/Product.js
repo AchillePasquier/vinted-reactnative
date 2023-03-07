@@ -184,6 +184,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 30,
+    marginBottom: 30,
   },
   buyButtonText: {
     color: "#1E1E1E",

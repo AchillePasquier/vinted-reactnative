@@ -1,6 +1,6 @@
 // //import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as React from "react";
-import { Button, Text, View, TextInput } from "react-native";
+import { Button, Text, View, TextInput, Dimensions } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -42,6 +42,7 @@ function HomeStackScreen() {
         component={HomeScreen}
         options={({ navigation, route }) => ({
           headerTitle: (props) => <SearchBar {...props} />,
+          // headerLargeTitle: true,
         })}
       />
       <HomeStack.Screen
@@ -62,26 +63,50 @@ function HomeStackScreen() {
   );
 }
 
+const PublishStack = createNativeStackNavigator();
+
+function PublishStackScreen({ userToken }) {
+  return (
+    <PublishStack.Navigator>
+      <PublishStack.Screen
+        name="Publish"
+        options={{ headerShown: false }}
+      ></PublishStack.Screen>
+    </PublishStack.Navigator>
+  );
+}
+
 const SettingsStack = createNativeStackNavigator();
 
-function SettingsStackScreen() {
+function SettingsStackScreen({ setToken, userId, userToken, setId }) {
   return (
     <SettingsStack.Navigator>
       <SettingsStack.Screen
         name="Settings"
-        component={SettingsScreen}
+        // component={SettingsScreen}
         options={{ headerShown: false }}
-      />
-      <SettingsStack.Screen name="Details" component={DetailsScreen} />
+      >
+        {() => <SettingsScreen setToken={setToken} setId={setId} />}
+      </SettingsStack.Screen>
+      <SettingsStack.Screen
+        name="Details"
+        //component={DetailsScreen}
+        options={{ headerShown: false }}
+      >
+        {() => <DetailsScreen userId={userId} userToken={userToken} />}
+      </SettingsStack.Screen>
     </SettingsStack.Navigator>
   );
 }
 
 const Tab = createBottomTabNavigator();
 
+const HEIGHT = Dimensions.get("window").height;
+
 export default function App() {
   const [isLoading, setIsloading] = useState(true);
   const [userToken, setUserToken] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   const setToken = async (token) => {
     if (token) {
@@ -92,11 +117,24 @@ export default function App() {
     setUserToken(token);
   };
 
+  // save or remove id in AsyncStorage & state
+  const setId = async (id) => {
+    if (id) {
+      AsyncStorage.setItem("userId", id);
+      setUserId(id);
+    } else {
+      AsyncStorage.removeItem("userId");
+      setUserId(null);
+    }
+  };
+
   useEffect(() => {
     const bootstrapAsync = async () => {
       //on aurait du foutre un try catch mais bon (pour les apps en production)
       const userToken = await AsyncStorage.getItem("userToken");
+      const userId = await AsyncStorage.getItem("userId");
       setUserToken(userToken);
+      setUserId(userId);
       setIsloading(false);
     };
     bootstrapAsync();
@@ -113,11 +151,23 @@ export default function App() {
           <Stack.Screen name="Started" options={{ headerShown: false }}>
             {() => <StartedScreen />}
           </Stack.Screen>
-          <Stack.Screen name="LogIn" options={{ headerShown: true }}>
-            {() => <LogInScreen setToken={setToken} />}
+          <Stack.Screen
+            name="LogIn"
+            options={{
+              headerShown: false,
+            }}
+          >
+            {() => <LogInScreen setToken={setToken} setId={setId} />}
           </Stack.Screen>
-          <Stack.Screen name="SignUp" options={{ headerShown: true }}>
-            {(props) => <SignUpScreen {...props} setToken={setToken} />}
+          <Stack.Screen
+            name="SignUp"
+            options={{
+              headerShown: false,
+            }}
+          >
+            {(props) => (
+              <SignUpScreen {...props} setToken={setToken} setId={setId} />
+            )}
           </Stack.Screen>
         </Stack.Navigator>
       ) : (
@@ -129,10 +179,13 @@ export default function App() {
             tabBarStyle: {
               backgroundColor: "#1E1E1E",
               borderTopWidth: 0,
-              height: 80,
+              height: HEIGHT * 0.08,
             },
             tabBarIconStyle: {
-              marginTop: 7,
+              marginTop: HEIGHT * 0.008,
+            },
+            tabBarLabelStyle: {
+              marginBottom: HEIGHT * 0.008,
             },
           }}
         >
@@ -148,15 +201,42 @@ export default function App() {
             component={HomeStackScreen}
           />
           <Tab.Screen
-            name="TabSettings"
+            name="TabPublish"
             options={{
-              tabBarLabel: "Paramètres",
+              tabBarLabel: "Vendre",
+              tabBarShowLabel: true,
               tabBarIcon: ({ color, size }) => (
-                <Ionicons name="settings" size={size} color={color} />
+                <Ionicons name="add-circle" size={size} color={color} />
               ),
             }}
-            component={SettingsStackScreen}
-          />
+            // component={PublishStackScreen}
+          >
+            {() => (
+              <PublishStackScreen
+                // userId={userId}
+                userToken={userToken}
+              />
+            )}
+          </Tab.Screen>
+          <Tab.Screen
+            name="TabSettings"
+            options={{
+              tabBarLabel: "Profil",
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="person" size={size} color={color} />
+              ),
+            }}
+            // component={SettingsStackScreen}
+          >
+            {() => (
+              <SettingsStackScreen
+                setToken={setToken}
+                userId={userId}
+                userToken={userToken}
+                setId={setId}
+              />
+            )}
+          </Tab.Screen>
         </Tab.Navigator>
       )}
     </NavigationContainer>

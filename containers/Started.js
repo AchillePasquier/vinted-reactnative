@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import imageAcceuil from "../assets/photoAccueil.png";
 
 const WIDTH = Dimensions.get("window").width;
+const HEIGHT = Dimensions.get("window").height;
 
 function StartedScreen() {
   const navigation = useNavigation();
@@ -59,14 +60,14 @@ const styles = StyleSheet.create({
   image: {
     width: WIDTH * 0.97,
     height: WIDTH,
-    marginTop: 80,
+    marginTop: HEIGHT * 0.05,
   },
   text: {
     color: "#E7E7E7",
     fontSize: 25,
     textAlign: "center",
     width: WIDTH * 0.95,
-    marginTop: 50,
+    marginTop: HEIGHT * 0.05,
   },
   registerButton: {
     width: WIDTH * 0.9,
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#449da9",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 40,
+    marginTop: HEIGHT * 0.05,
     borderWidth: 1,
     borderColor: "#449da9",
   },
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
     borderColor: "#449da9",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 20,
+    marginTop: HEIGHT * 0.025,
   },
   loginButtonText: {
     color: "#449da9",
