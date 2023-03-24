@@ -11,6 +11,8 @@ import StartedScreen from "./containers/Started";
 import SignUpScreen from "./containers/SignUp";
 import LogInScreen from "./containers/LogIn";
 
+import PublishScreen from "./containers/Publish";
+
 import HomeScreen from "./containers/Home";
 import ProductScreen from "./containers/Product";
 import PaymentScreen from "./containers/Payment";
@@ -22,6 +24,7 @@ import SearchBar from "./components/Searchbar";
 import Logo from "./components/Logo";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const Stack = createNativeStackNavigator();
 
@@ -68,10 +71,9 @@ const PublishStack = createNativeStackNavigator();
 function PublishStackScreen({ userToken }) {
   return (
     <PublishStack.Navigator>
-      <PublishStack.Screen
-        name="Publish"
-        options={{ headerShown: false }}
-      ></PublishStack.Screen>
+      <PublishStack.Screen name="Publish" options={{ headerShown: false }}>
+        {() => <PublishScreen userToken={userToken} />}
+      </PublishStack.Screen>
     </PublishStack.Navigator>
   );
 }
@@ -107,6 +109,8 @@ export default function App() {
   const [isLoading, setIsloading] = useState(true);
   const [userToken, setUserToken] = useState(null);
   const [userId, setUserId] = useState(null);
+
+  const size = 20;
 
   const setToken = async (token) => {
     if (token) {
@@ -178,14 +182,14 @@ export default function App() {
             tabBarInactiveTintColor: "#B8B8B8",
             tabBarStyle: {
               backgroundColor: "#1E1E1E",
+              borderTopColor: "#1E1E1E",
               borderTopWidth: 0,
-              height: HEIGHT * 0.08,
             },
             tabBarIconStyle: {
-              marginTop: HEIGHT * 0.008,
+              marginTop: 5,
             },
             tabBarLabelStyle: {
-              marginBottom: HEIGHT * 0.008,
+              marginBottom: 5,
             },
           }}
         >
@@ -195,7 +199,10 @@ export default function App() {
               tabBarLabel: "Accueil",
               tabBarShowLabel: true,
               tabBarIcon: ({ color, size }) => (
-                <Ionicons name="home-sharp" size={size} color={color} />
+                // <Ionicons name="home-sharp" size={size} color={color} />
+                // <Octicons name="fillclock" size={size} color={color} />
+                // <Entypo name="home" size={size} color={color} />
+                <MaterialIcons name="home-filled" size={28} color={color} />
               ),
             }}
             component={HomeStackScreen}
@@ -206,7 +213,7 @@ export default function App() {
               tabBarLabel: "Vendre",
               tabBarShowLabel: true,
               tabBarIcon: ({ color, size }) => (
-                <Ionicons name="add-circle" size={size} color={color} />
+                <MaterialIcons name="add-circle" size={size} color={color} />
               ),
             }}
             // component={PublishStackScreen}

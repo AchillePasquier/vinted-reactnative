@@ -30,7 +30,7 @@ function SignUpScreen({ navigation, setToken, setId }) {
 
   const handleSubmit = async () => {
     setError("");
-    if (email && username && description && password && confirmPassword) {
+    if (email && username && newsLetter && password && confirmPassword) {
       if (password === confirmPassword) {
         try {
           const response = await axios.post(

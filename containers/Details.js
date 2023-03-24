@@ -42,7 +42,7 @@ function DetailsScreen({ userId, userToken }) {
         );
         //console.log(response.data);
         setData(response.data);
-        console.log(response.data);
+        // console.log(response.data);
         setIsloading(false);
       } catch (error) {
         console.log(error);
@@ -103,6 +103,8 @@ const styles = StyleSheet.create({
     top: 16,
     color: "#E7E7E7",
     left: WIDTH * 0.045,
+    // borderWidth: 1,
+    // borderColor: "blue",
   },
   title: {
     textAlign: "center",

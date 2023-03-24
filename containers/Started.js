@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   image: {
     width: WIDTH * 0.97,
     height: WIDTH,
-    marginTop: HEIGHT * 0.05,
+    marginTop: HEIGHT * 0.07,
   },
   text: {
     color: "#E7E7E7",
